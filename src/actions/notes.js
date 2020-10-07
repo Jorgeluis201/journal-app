@@ -4,6 +4,8 @@ import { types } from "../types/types";
 import { db } from "../firebase/firebase-config";
 import { loadNotes } from '../helpers/loadNotes';
 
+
+
 export const startNewNote = () => {
     // Usamos el segundo argumento, que es una funcion para obtener el state
     return async ( dispatch, getState ) => {
@@ -56,6 +58,31 @@ export const setNotes = ( notes ) =>({
     payload:notes
 })
 
+
+export const startSaveNote = ( note ) => {
+    return async( dispatch, getState ) => {
+       
+        
+        const { uid } = getState().auth;
+        // Validamos que no exista el url
+        if ( !note.url ){
+            // Eliminamos la propiedad url, para que no se dispare el error de undefined.
+            delete note.url;
+            
+        }
+        //Extraemos todas las propiedades del objeto note y los guardamos en noteToFireStore. 
+        const noteToFirestore = { ...note };
+        // Borramos el id.
+        delete noteToFirestore.id;
+        
+        
+        // Grabamos en la base de datos, utilizando el path y la funcion update
+        await db.doc(`${ uid }/journal/notes/${ note.id }`).update( noteToFirestore );
+
+        
+
+    }
+}
 
 
 

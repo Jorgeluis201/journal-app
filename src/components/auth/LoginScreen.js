@@ -36,9 +36,12 @@ export const LoginScreen = () => {
 
 
     //Disparamos la accion de startGoogleLogin
-   const handleGoogleLogin = ()=>{
-       dispatch(startGoogleLogin());
-   }
+    const handleGoogleLogin = ()=>{
+        
+        if(isValid){
+           dispatch(startGoogleLogin());
+        }
+    }
 
 
 //    Validar entradas de los input
